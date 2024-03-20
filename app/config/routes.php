@@ -26,8 +26,8 @@ use Cake\Routing\RouteBuilder;
 
 /*
  * This file is loaded in the context of the `Application` class.
-  * So you can use  `$this` to reference the application class instance
-  * if required.
+ * So you can use  `$this` to reference the application class instance
+ * if required.
  */
 return function (RouteBuilder $routes): void {
     /*
@@ -64,7 +64,15 @@ return function (RouteBuilder $routes): void {
          */
         $builder->connect('/pages/*', 'Pages::display');
 
+        // Article routes
         $builder->resources('Articles');
+        $builder->connect('/articles/:id/like', ['controller' => 'Articles', 'action' => 'like'])
+            ->setMethods(['POST']);
+
+        // Authentication routes
+        $builder->connect('/login', ['controller' => 'Auth', 'action' => 'login']);
+        $builder->connect('/register', ['controller' => 'Auth', 'action' => 'register']);
+
 
         /*
          * Connect catchall routes for all controllers.
