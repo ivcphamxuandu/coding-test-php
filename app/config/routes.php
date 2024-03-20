@@ -68,6 +68,8 @@ return function (RouteBuilder $routes): void {
         $builder->resources('Articles');
         $builder->connect('/articles/:id/like', ['controller' => 'Articles', 'action' => 'like'])
             ->setMethods(['POST']);
+        $builder->connect('/articles/:id/like', ['controller' => 'Articles', 'action' => 'like'])
+            ->setMethods(['POST']);
 
         // Authentication routes
         $builder->connect('/login', ['controller' => 'Auth', 'action' => 'login']);

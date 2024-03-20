@@ -11,6 +11,12 @@ namespace App\Controller;
  */
 class ArticlesController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('Authentication.Authentication');
+    }
+
     /**
      * Index method
      *
@@ -107,4 +113,31 @@ class ArticlesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function like($id = null)
+    {
+        $article = $this->Articles->get($id, ['contain' => 'ArticleLikes']);
+
+        // Check if user has already liked the article
+        $userId = $this->Authentication->getIdentity()->id;
+        foreach ($article->article_likes as $like) {
+            if ($like->user_id === $userId) {
+                $this->Flash->error('You have already liked this article.');
+                return $this->redirect(['action' => 'view', $id]);
+            }
+        }
+
+        // Update like count and save like
+        $article->like_count++;
+        $articleLike = $this->Articles->ArticleLikes->newEntity(['user_id' => $userId]);
+        $article->article_likes[] = $articleLike;
+        if ($this->Articles->save($article, ['associated' => ['ArticleLikes']])) {
+            $this->Flash->success('Article liked successfully.');
+        } else {
+            $this->Flash->error('Failed to like the article.');
+        }
+
+        return $this->redirect(['action' => 'view', $id]);
+    }
+
 }
