@@ -2,7 +2,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
-class ArticleLike extends Entity
+class UserArticleLike extends Entity
 {
     protected $_accessible = [
         '*' => true,

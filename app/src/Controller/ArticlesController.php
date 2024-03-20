@@ -14,7 +14,7 @@ class ArticlesController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('Authentication.Authentication');
+        // $this->loadComponent('Authentication.Authentication');
     }
 
     /**
@@ -116,7 +116,8 @@ class ArticlesController extends AppController
 
     public function like($id = null)
     {
-        $article = $this->Articles->get($id, ['contain' => 'ArticleLikes']);
+        $article = $this->Articles->get($id);
+        $this->request->allowMethod(['post']);
 
         // Check if user has already liked the article
         $userId = $this->Authentication->getIdentity()->id;
