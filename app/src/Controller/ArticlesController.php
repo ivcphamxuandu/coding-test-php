@@ -121,7 +121,7 @@ class ArticlesController extends AppController
 
         // Check if user has already liked the article
         $userId = $this->Authentication->getIdentity()->id;
-        foreach ($article->article_likes as $like) {
+        foreach ($article->user_article_likes as $like) {
             if ($like->user_id === $userId) {
                 $this->Flash->error('You have already liked this article.');
                 return $this->redirect(['action' => 'view', $id]);
@@ -130,9 +130,9 @@ class ArticlesController extends AppController
 
         // Update like count and save like
         $article->like_count++;
-        $articleLike = $this->Articles->ArticleLikes->newEntity(['user_id' => $userId]);
-        $article->article_likes[] = $articleLike;
-        if ($this->Articles->save($article, ['associated' => ['ArticleLikes']])) {
+        $articleLike = $this->Articles->UserArticleLikes->newEntity(['user_id' => $userId]);
+        $article->user_article_likes[] = $articleLike;
+        if ($this->Articles->save($article, ['associated' => ['UserArticleLikes']])) {
             $this->Flash->success('Article liked successfully.');
         } else {
             $this->Flash->error('Failed to like the article.');
