@@ -63,9 +63,22 @@ return function (RouteBuilder $routes): void {
          * ...and connect the rest of 'Pages' controller's URLs.
          */
         $builder->connect('/pages/*', 'Pages::display');
-
+        $builder->setExtensions(['json', 'xml']);
         // Article routes
         $builder->resources('Articles');
+        $builder->get('/articles.json', ['controller' => 'Articles', 'action' => 'index']);
+        $builder->get('/articles/:id.json', ['controller' => 'Articles', 'action' => 'view'])
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
+        $builder->post('/articles.json', ['controller' => 'Articles', 'action' => 'add']);
+
+        $builder->put('/articles/:id.json', ['controller' => 'Articles', 'action' => 'edit'])
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
+
+        $builder->delete('/articles/:id.json', ['controller' => 'Articles', 'action' => 'delete'])
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
         $builder->connect('/articles/:id/like', ['controller' => 'Articles', 'action' => 'like'])
             ->setPass(['id'])
             ->setPatterns(['id' => '\d+'])

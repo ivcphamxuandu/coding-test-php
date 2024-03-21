@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use Cake\View\JsonView;
 
 /**
  * Articles Controller
@@ -17,6 +18,11 @@ class ArticlesController extends AppController
         // $this->loadComponent('Authentication.Authentication');
     }
 
+    public function viewClasses(): array
+    {
+        return [JsonView::class];
+    }
+
     /**
      * Index method
      *
@@ -28,8 +34,18 @@ class ArticlesController extends AppController
             'contain' => ['Users'],
         ];
         $articles = $this->paginate($this->Articles);
-
         $this->set(compact('articles'));
+        $this->response = $this->response->withType('json');
+        // Set serialization options for pagination results
+        $this->set([
+            'articles' => $articles,
+            '_serialize' => 'articles'
+        ]);
+        // Disable view rendering for API endpoints
+        $this->viewBuilder()->disableAutoLayout();
+        $this->viewBuilder()->setOption('serialize', 'articles');
+        echo json_encode(compact('articles'));
+        return $this->response;
     }
 
     /**
@@ -46,6 +62,10 @@ class ArticlesController extends AppController
         ]);
 
         $this->set(compact('article'));
+        // Disable view rendering for API endpoints
+        $this->viewBuilder()->disableAutoLayout();
+        $this->viewBuilder()->setOption('serialize', 'articles');
+        echo json_encode(compact('article'));
     }
 
     /**
