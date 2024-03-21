@@ -71,10 +71,6 @@ return function (RouteBuilder $routes): void {
             ->setPatterns(['id' => '\d+'])
             ->setMethods(['POST']);
 
-        // Authentication routes
-        $builder->connect('/login', ['controller' => 'Auth', 'action' => 'login']);
-        $builder->connect('/register', ['controller' => 'Auth', 'action' => 'register']);
-
 
         /*
          * Connect catchall routes for all controllers.
